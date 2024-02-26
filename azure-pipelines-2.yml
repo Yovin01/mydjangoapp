@@ -1,0 +1,26 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_COMPOSE_VERSION: "1.29.2"
+
+before_script:
+  - apt-get update -qy
+  - apt-get install -y docker-compose
+  - docker-compose --version
+
+services:
+  - docker:dind
+
+build:
+  stage: build
+  script:
+    - docker-compose build
+
+deploy:
+  stage: deploy
+  script:
+    - docker-compose up -d
+  only:
+    - master  # Ejecutar solo cuando se hace un push a la rama master
