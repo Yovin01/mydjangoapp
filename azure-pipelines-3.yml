@@ -1,0 +1,20 @@
+trigger:
+- master  # Ejecutar el pipeline cuando se realiza un push a la rama master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- script: |
+    docker-compose build
+  displayName: 'Docker Compose Build'
+
+- script: |
+    docker-compose up -d
+  displayName: 'Docker Compose Up'
